@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            width: 500px;
+            height: 500px;
+            background-color: pink;
+            margin: 50px auto;
+        }
+
+        p {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button id="btn1">按钮20</button>
+        <button id="btn2">按钮40</button>
+        <button id="btn3">按钮60</button>
+        <p>闭包把我搞的</p>
+    </div>
+    <script>
+        /* 
+            1. 结构中有三个按钮分别绑定点击事件
+            2. 点击事件触发一个函数 是修改p标签文本大小的
+            3. 使用闭包实现字体大小的设置
+        */
+        var btn1 = document.querySelector('#btn1')
+        var btn2 = document.querySelector('#btn2')
+        var btn3 = document.querySelector('#btn3')
+
+        function setFisz(fontSize) {
+            return function() {
+                document.body.style.fontSize = `${fontSize}px`
+            }
+        }
+        btn1.onclick = setFisz(20)
+        btn2.onclick = setFisz(40)
+        btn3.onclick = setFisz(60)
+    </script>
+</body>
+
+</html>
