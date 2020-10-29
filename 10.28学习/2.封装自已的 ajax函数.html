@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let data = {
+            name: '网吧',
+            age: 11
+        }
+
+        // 封装一个函数将数据转换字符串格式且  &符号链接
+        function resolveData(data) {
+            // 声明一个数组
+            let arr = []
+            // 遍历对象 且将属性名 和值 连接起来作为一个值push给空数组
+            for (var k in data) {
+                let str = k + '=' + data[k]
+                // console.log(str);
+                arr.push(str)
+            }
+            // console.log(arr);
+            return arr.join('&')
+        }
+        // resolveData(data)
+
+        // 封装一个请求服务器数据函数
+        function xhr(options) {
+            // 创建xhr对象
+            let xhr = new XMLHttpRequest()
+            // 把外界传递过来的参数对象，转换为 查询字符串
+            let qs = resolveData(options.data)
+            // 判定请求状态 get 还是 post
+            if (optios.method.toUppercase() === ' GET') {
+                // get 请求 url是 根路径 加上后面的参数数据（提交的）
+                xhr.open(options.method, options.url + '?' + qs)
+                xhr.send()
+            } else if (optios.method.toUppercase() === ' PSOT') {
+                xhr.open(options.method, options.url)
+                xhr.setRequestHeader('content-Type', 'application/x-www-form-urlencoded')
+                xhr.send(qs)
+            }
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let res = JSON.parse(xhr.responseText)
+                    options.success(res)
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

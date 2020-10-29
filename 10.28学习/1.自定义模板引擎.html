@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入jq插件 -->
+    <script src="lib/jquery.js"></script>
+    <script src="js/template.js"></script>
+</head>
+
+<body>
+    <!-- 1.定义模板结构 2.预调用模板引擎 3. 封装template函数 4.导入并使用定义的模板引擎-->
+
+    <!-- 模板引擎就是字符串替换 -->
+    <div id="user-box"></div>
+    <!-- 定义模板结构 -->
+    <script type="text/html" id="tpl-user">
+        <div>姓名：{{name}}</div>
+        <div>年龄：{{age}}</div>
+        <div>性别：{{sex}}</div>
+        <div>爱好：{{hobby}}</div>
+    </script>
+
+    <script>
+        //  2.预调用模板引擎
+
+        // 创建数据对象
+        let data = {
+            name: '嘉文四世',
+            age: 500,
+            sex: '男',
+            hobby: '天崩地裂'
+        }
+
+        // 调用模板函数
+        let htmlStr = template('tpl-user', data)
+
+        // 渲染html结构
+        $('#user-box').html(htmlStr)
+    </script>
+
+  
+</body>
+
+</html>
