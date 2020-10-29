@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入bootstrap样式 -->
+    <link rel="stylesheet" href="lib/bootstrap.css">
+    <!-- 引入jq脚本 -->
+    <script src="lib/jquery.js"></script>
+</head>
+
+<body>
+    <!-- 1.文件选中框 -->
+    <input type="file" id="file1" />
+    <!-- 2. 上传文件的按钮 -->
+    <button id='btnUpload'>上传文件</button>
+
+    <!-- bootstrap中的进度条 -->
+    <div class="progress" style="width: 500px; margin: 15px 10px;">
+        <div class="progress-bar progress-bar-striped active" style="width: 0%" id="percent">
+            0%
+        </div>
+    </div>
+    <br />
+    <!-- 3.img标签 来显示上传成功以后的图片 -->
+    <img src="" alt="" id="img" width="800">
+
+    <script>
+        // 获取上传按钮元素
+        let btnUpload = document.querySelector('#btnUpload')
+        // 获取进度条元素
+        let percent = document.querySelector('#percent')
+        // 注册点击事件
+        btnUpload.addEventListener('click', function () {
+            // 点击获取进度条背景颜色 防止第二次上传文件  颜色变成改变后的颜色 因为没有刷新
+            percent.className = 'progress-bar progress-bar-striped active'
+            // 获取用户选择文件的列表
+            let files = document.querySelector('#file1').files
+            // 如果用户没上传 则提醒用户上传
+            if (files.length <= 0) return alert('请重新上传！')
+            // 创建获取表单数据对象
+            let fd = new FormData()
+            // 将用户选择的文件添加fd
+            fd.append('avatar', files[0])
+            // 用原生xhr请求发送数据
+            // 1.创建xhr对象
+            let xhr = new XMLHttpRequest()
+            // 监听文件的 上传进度
+            xhr.upload.onprogress = function (e) {
+                // e.lengthComputable 是一个布尔值，表示当前上传的资源是否具有可计算的长度
+                if (e.lengthComputable) {
+                    // e.loaded 已传输的字节
+                    // e.total  需传输的总字节
+                    let percentCompelete = Math.ceil((e.loaded / e.total) * 100)
+                    console.log(percentCompelete);
+                    // 动态设置进度条
+                    percent.style.width = percentCompelete + '%';
+                    percent.innerHTML = percentCompelete + '%';
+                }
+            }
+
+            // 完成状态 改变颜色 切换类名 移除原来的 类名
+            xhr.upload.onload = function () {
+                percent.className = 'progress-bar progress-bar-success'
+            }
+
+            //2.调用open()函数
+            xhr.open('POST', 'http://www.liulongbin.top:3006/api/upload/avatar')
+            //3.请求头 (不是提交表单不需要 请求头)
+            // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+            // 4.调用send()函数
+            xhr.send(fd)
+            //5.查询请求状态是否改变
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // 将字符串转为数据对象
+                    let data = JSON.parse(xhr.responseText)
+                    if (data.status === 200) {
+                        // 上传成功
+                        document.querySelector('#img').src = 'http://www.liulongbin.top:3006' + data.url
+                    } else {
+                        // 上传失败
+                        console.log('图片上传失败!' + data.message);
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
