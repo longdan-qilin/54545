@@ -1,0 +1,37 @@
+$highlight-color: #f90;  // scss 主要是靠 $变量名 less @变量名
+$basic-border: 1px solid black;
+#app {
+  background-color: $highlight-color;
+  border: $basic-border;
+}
+
+$nav-color: #F90;
+nav {
+  $width: 100px;
+  width: $width;
+  color: $nav-color;
+  background-color: blue;
+}
+
+#content {
+  article {
+    h1 {
+      color: #1dc08a;
+    }
+
+    p {
+       font-size: 55px;
+    }
+
+    a {
+      color: #1dc08a;
+      &:hover {
+        color: red;
+      }
+    }
+  }
+
+  aside {
+    background-color: #F90;
+  }
+}
